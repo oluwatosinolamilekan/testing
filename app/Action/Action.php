@@ -5,6 +5,7 @@ namespace App\Action;
 use App\Enum\ActionTypeStatus;
 use App\Helper\UserHelper;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -25,18 +26,16 @@ class Action
     public function run()
     {
         $counter = 0;
-        $data = [];
         $actions = self::getUserActions()['point'];
-        dd($actions);
-//        for ($x = 0; $x <= count($data); $x++){
-//            //if counter equal to 5 ;
-////            if carbon::diffInHours($data[x], $data[x+1]) < 2;
-////              $count +=1;
-////              $x = $x + 1;
-//
-//            $data[$x+1] = $x->diffInHours(2);
-//            echo "The number is: $x <br>";
-//        }
+        for ($x = 0; $x <= count($actions); $x++){
+            if($counter === 5 && Carbon::diffInHours([$x], [$x+1]) < 2){
+                $counter +=1;
+                $x = $x + 1;
+            }else{
+                $counter = 1;
+                $x = 1;
+            }
+        }
     }
 
     /**
@@ -69,9 +68,16 @@ class Action
             }
         }
         return [
-            'actions' => $actions,
+            'actions' => $actions ?? [],
             'point' => $point,
             'user' => $user
         ];
     }
+
+    //if counter equal to 5 ;
+//            if carbon::diffInHours($data[x], $data[x+1]) < 2;
+//              $count +=1;
+//              $x = $x + 1;
+
+//$data[$x+1] = $x->diffInHours(2);
 }

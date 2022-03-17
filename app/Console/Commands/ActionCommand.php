@@ -65,6 +65,5 @@ class ActionCommand extends Command
         return (new Action(ActionTypeStatus::Delivery, ActionTypeStatus::RideshareValue, ActionTypeStatus::Rent))->run();
 //        $headers = ['Year','User Id','Client Type','Action Type','Amount'];
 //        $this->table($headers,$commission);
-        return 0;
     }
 }

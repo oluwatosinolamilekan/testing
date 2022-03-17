@@ -15,6 +15,7 @@ class ActionTypeSeeder extends Seeder
      */
     public function run()
     {
+        ActionType::truncate();
         $types = [
             [
                 'name' => 'Delivery',

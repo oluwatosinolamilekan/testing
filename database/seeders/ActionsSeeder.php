@@ -16,6 +16,7 @@ class ActionsSeeder extends Seeder
      */
     public function run()
     {
+        Action::truncate();
         foreach (range(1,50) as $actions){
             $action = new Action();
             $action->action_type = ActionType::inRandomOrder()->take(1)->first()->id;

@@ -29,6 +29,7 @@ class BoosterSeeder extends Seeder
      */
     public function run()
     {
+        Booster::truncate();
         $types = [
            [
                'name' => 'Delivery',

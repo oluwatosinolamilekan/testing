@@ -23,16 +23,6 @@ class ActionCommand extends Command
     protected $description = 'Command description';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
     You are developing the “Incentives Program”. Users can earn bonus points by performing specific actions. At the moment, there are three types of actions. Each of them results in a different amount of points which user receives:
     - delivery: 1 point for every action
     - rideshare: 1 point for every action
@@ -62,8 +52,9 @@ class ActionCommand extends Command
      */
     public function handle()
     {
-        return (new Action(ActionTypeStatus::Delivery, ActionTypeStatus::RideshareValue, ActionTypeStatus::Rent))->run();
-//        $headers = ['Year','User Id','Client Type','Action Type','Amount'];
-//        $this->table($headers,$commission);
+        $actions = (new Action())->run();
+        $headers = ['Actions','Point','Status',];
+        $this->table($headers,$actions);
+        $this->info('done');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Action;
 
+use \App\Models\Action as ActionModel;
 use App\Enum\ActionTypeStatus;
 use App\Helper\UserHelper;
 use App\Models\User;
@@ -11,31 +12,26 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Action
 {
-    protected $delivery;
-    protected $redishare;
-    protected $rent;
-
-    public function __construct($delivery, $redishare, $rent)
-    {
-        $this->delivery = $delivery;
-        $this->redishare = $redishare;
-        $this->rent = $rent;
-    }
-
 
     public function run()
     {
         $counter = 0;
-        $actions = self::getUserActions()['point'];
+        $actions = self::getUserActions()['actions'];
+        $results = [];
         for ($x = 0; $x <= count($actions); $x++){
-            if($counter === 5 && Carbon::diffInHours([$x], [$x+1]) < 2){
-                $counter +=1;
-                $x = $x + 1;
+                if($counter === 5 && Carbon::diffInHours([$actions[$x]], [$actions[$x+1]]) < 2){
+                    $counter +=1;
+                    $x = $x + 1;
             }else{
                 $counter = 1;
                 $x = 1;
             }
+//            $results[] = [
+//                'date' => '',
+//                'point' => '',
+//            ];
         }
+        return $results;
     }
 
     /**
@@ -56,7 +52,7 @@ class Action
     {
         $user = UserHelper::getARandomUser();
 
-        $actions = \App\Models\Action::whereUserId($user->id)->get()->toArray();
+        $actions = ActionModel::whereUserId($user->id)->take(2)->get()->toArray();
         $point = [];
         foreach ($actions as $action) {
             if($action['action_type'] === ActionTypeStatus::Delivery){

@@ -12,4 +12,6 @@ use Illuminate\Database\Query\Builder;
 class Action extends Model
 {
     use HasFactory;
+
+    protected $hidden = ['id','created_at','updated_at'];
 }

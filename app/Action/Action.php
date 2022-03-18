@@ -16,10 +16,17 @@ class Action
     {
         $counter = 0;
         $actions = self::getUserActions()['actions'];
-        $count_action = count($actions) - 1;
+        $count_action = count($actions);
         $results = [];
-        for ($x = 0; $x <= $count_action; $x++){
-            if($counter === 5 &&  Carbon::diffInHours($actions[$x]['time'], $actions[$x + 1]['time']) < 2){
+        foreach ($actions as $x => $action){
+            if($x = 0){
+                $date = 0;
+            }else{
+                $date= $x;
+            }
+            $startTime = Carbon::parse($actions[$date]['time']);
+            $endTime = Carbon::parse($actions[$date + 1]['time']);
+            if($startTime->diffInHours($endTime) > 2){
                     $counter +=1;
                     $point = 5;
                     $status  = 'expired';
@@ -36,6 +43,11 @@ class Action
                 'status' => $status,
             ];
         }
+            $results[] = [
+                'date' => $type,
+                'point' => $point,
+                'status' => $status,
+            ];
         return $results;
     }
 
@@ -57,7 +69,7 @@ class Action
     {
         $user = UserHelper::getARandomUser();
 
-        $actions = ActionModel::whereUserId($user->id)->with('type')->take(10)->get()->toArray();
+        $actions = ActionModel::whereUserId($user->id)->latest()->with('type')->take(11)->get()->toArray();
         $point = [];
         foreach ($actions as $action) {
             if($action['action_type'] === ActionTypeStatus::Delivery){

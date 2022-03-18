@@ -17,13 +17,18 @@ class ActionsSeeder extends Seeder
     public function run()
     {
         Action::truncate();
-        foreach (range(1,50) as $actions){
+        foreach (range(1,9) as $actions){
             $action = new Action();
             $action->action_type = ActionType::inRandomOrder()->take(1)->first()->id;
             $action->user_id = User::inRandomOrder()->take(1)->first()->id;
-            $action->time = now()->addHour(4);
+            $action->time = now();
             $action->save();
-
         }
+
+        $action = new Action();
+        $action->action_type = ActionType::inRandomOrder()->take(1)->first()->id;
+        $action->user_id = User::inRandomOrder()->take(1)->first()->id;
+        $action->time = now()->addHour(3);
+        $action->save();
     }
 }

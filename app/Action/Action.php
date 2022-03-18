@@ -16,18 +16,22 @@ class Action
     {
         $counter = 0;
         $actions = self::getUserActions()['actions'];
+        $count_action = count($actions) - 1;
         $results = [];
-        for ($x = 0; $x <= count($actions); $x++){
+        for ($x = 0; $x <= $count_action; $x++){
             if($counter === 5 &&  Carbon::diffInHours($actions[$x]['time'], $actions[$x + 1]['time']) < 2){
                     $counter +=1;
-                    $x = $x + 1;
+                    $point = 5;
+                $status  = 'expired';
             }else{
                 $counter = 1;
-                $x = 0;
+                $point = 1;
+                $status  = 'valid';
             }
             $results[] = [
                 'date' => $actions[$x]['time'],
-                'point' => rand(1,3),
+                'point' => $point,
+                'status' => $status,
             ];
         }
         return $results;
@@ -69,10 +73,4 @@ class Action
         ];
     }
 
-    //if counter equal to 5 ;
-//            if carbon::diffInHours($data[x], $data[x+1]) < 2;
-//              $count +=1;
-//              $x = $x + 1;
-
-//$data[$x+1] = $x->diffInHours(2);
 }

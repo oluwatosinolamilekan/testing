@@ -53,7 +53,7 @@ class ActionCommand extends Command
     public function handle()
     {
         $actions = (new Action())->run();
-        $headers = ['Actions','Point','Status',];
+        $headers = ['Action','Point','Status',];
         $this->table($headers,$actions);
 //        $this->info('done');
     }

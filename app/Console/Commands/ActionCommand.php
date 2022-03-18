@@ -55,6 +55,6 @@ class ActionCommand extends Command
         $actions = (new Action())->run();
         $headers = ['Actions','Point','Status',];
         $this->table($headers,$actions);
-        $this->info('done');
+//        $this->info('done');
     }
 }

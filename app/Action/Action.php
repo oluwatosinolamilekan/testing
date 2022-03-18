@@ -12,24 +12,23 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Action
 {
-
     public function run()
     {
         $counter = 0;
         $actions = self::getUserActions()['actions'];
         $results = [];
         for ($x = 0; $x <= count($actions); $x++){
-                if($counter === 5 && Carbon::diffInHours([$actions[$x]], [$actions[$x+1]]) < 2){
+            if($counter === 5 &&  Carbon::diffInHours($actions[$x]['time'], $actions[$x + 1]['time']) < 2){
                     $counter +=1;
                     $x = $x + 1;
             }else{
                 $counter = 1;
-                $x = 1;
+                $x = 0;
             }
-//            $results[] = [
-//                'date' => '',
-//                'point' => '',
-//            ];
+            $results[] = [
+                'date' => $actions[$x]['time'],
+                'point' => rand(1,3),
+            ];
         }
         return $results;
     }
@@ -52,7 +51,7 @@ class Action
     {
         $user = UserHelper::getARandomUser();
 
-        $actions = ActionModel::whereUserId($user->id)->take(2)->get()->toArray();
+        $actions = ActionModel::whereUserId($user->id)->take(10)->get()->toArray();
         $point = [];
         foreach ($actions as $action) {
             if($action['action_type'] === ActionTypeStatus::Delivery){

@@ -22,14 +22,16 @@ class Action
             if($counter === 5 &&  Carbon::diffInHours($actions[$x]['time'], $actions[$x + 1]['time']) < 2){
                     $counter +=1;
                     $point = 5;
-                $status  = 'expired';
+                    $status  = 'expired';
+                 $type =  $actions[$x]['type']['name']." in ".Carbon::parse($actions[$x]['time'])->diffForHumans();
             }else{
                 $counter = 1;
                 $point = 1;
+                $type =  $actions[$x]['type']['name']." on ".Carbon::parse($actions[$x]['time'])->format('M, d H:i');
                 $status  = 'valid';
             }
             $results[] = [
-                'date' => $actions[$x]['time'],
+                'date' => $type,
                 'point' => $point,
                 'status' => $status,
             ];
@@ -55,7 +57,7 @@ class Action
     {
         $user = UserHelper::getARandomUser();
 
-        $actions = ActionModel::whereUserId($user->id)->take(10)->get()->toArray();
+        $actions = ActionModel::whereUserId($user->id)->with('type')->take(10)->get()->toArray();
         $point = [];
         foreach ($actions as $action) {
             if($action['action_type'] === ActionTypeStatus::Delivery){
